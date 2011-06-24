@@ -1,0 +1,110 @@
+=fixme
+Define todo- and fixme-command.
+
+==Usage:
+Add todo and fixme to your code and get track of your todos during 
+runtime of your code.
+
+When you pass a todo/fixme during execution, you get a logging information.
+
+  todo ('message' ) { "temporary result" }
+  fixme ('message' ) { "temporary result" }
+
+todo and fixme have the same syntax, the sematic meaning is:
+* ToDo: Mark missing code.
+* Todonotes: Mark code to repair.
+
+Disadvantage:
+* Does not replace a good IDE. 
+  to see the ToDo/Todonotes 
+
+Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957
+
+=Example
+
+Think, you have to write a script to count all prime between 1 to 10.
+
+You don't know how to check for primes, but at least you know,  primes must be odd.
+
+So you can start your program:
+  require 'todonotes'
+
+  primecount = 0
+  for i in 1..10
+          if fixme "Calculate if prime, prim = true, ja, sonst nein" do 
+                i.odd?  #tempory: odd = prim
+              end
+            primecount += 1 
+            puts "#{i} is a prime number"
+          else
+            puts "#{i} is no prime number"
+          end
+  end
+
+  todo "Return total number of primes"
+
+Or
+  require 'todonotes'
+  class Fixnum
+    def prime?
+        fixme "Calculate if prime" do 
+                self.odd?  #tempory: odd = prim
+        end    
+    end
+  end
+
+  primecount = 0
+  for i in 1..10
+          if i.prime?
+            primecount += 1 
+            puts "#{i} is a prime number"
+          else
+            puts "#{i} is no prime number"
+          end
+  end
+
+  todo "Return total number of primes"
+
+Now you get a output like this:
+
+  Todonotes: todonotes_prim2.rb:12 Calculate if prime misssing (temporary: true)
+  1 is a prime number
+  Todonotes: todonotes_prim2.rb:12(2) Calculate if prime misssing (temporary: false)
+  2 is no prime number
+  Todonotes: todonotes_prim2.rb:12(3) Calculate if prime misssing (temporary: true)
+  ...
+  ToDo : todonotes_prim2.rb:27 Return total number of primes (temporary: nil)
+
+
+The Todonotes is warning about a wrong or uncompleted code piece.
+
+The ToDo is warning for a missing code piece.
+
+You are informed about source code file and line number. In braces you get the number of calls.
+
+The todo/fixme command evaluates the optional block.
+The result is returned as a temporary result (in this example: odd numbers are primes.).
+
+==Logging
+
+The Fixme and ToDo are reported via a logger.
+The first call of a fixme/todo is a warning, the next call is an information.
+
+
+You may change the level with:
+  Todonotes.instance.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
+  Todonotes.instance.logger.level = Log4r::INFO   #report all calls of fixme/todo
+
+You can log the fixme/todos to a file:
+  Todonotes.instance.log2file()
+
+==Get Overview
+You may print an overview on all fixme/todos:
+  Todonotes.print_stats()
+
+Example:
+  List of ToDos/Todonotess:
+  todonotes_prim.rb:11:   10 calls
+  todonotes_prim.rb:21:    1 call
+
+There is a fixme/todo in line 11 and 21 in todonotes_prim.rb.
