@@ -59,7 +59,7 @@ You can use Fixme#instance to set some global settings:
 * FiXme#overview get overview text with ToDo-locations.
 =end
 class Todonotes
-  VERSION = '0.1.0'
+  VERSION = '0.1.1.beta'
   include Singleton
 =begin rdoc
 Define the singleton-instance.

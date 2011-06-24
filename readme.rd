@@ -1,8 +1,8 @@
-=fixme
-Define todo- and fixme-command.
+=todonotes
+Define todo- and fixme-command to mark open topics during software development.
 
 ==Usage:
-Add todo and fixme to your code and get track of your todos during 
+Add _todo_ and _fixme_ to your code and get track of your todos during 
 runtime of your code.
 
 When you pass a todo/fixme during execution, you get a logging information.
@@ -12,11 +12,11 @@ When you pass a todo/fixme during execution, you get a logging information.
 
 todo and fixme have the same syntax, the sematic meaning is:
 * ToDo: Mark missing code.
-* Todonotes: Mark code to repair.
+* FixMe: Mark code to repair.
 
 Disadvantage:
 * Does not replace a good IDE. 
-  to see the ToDo/Todonotes 
+  to see the ToDo/Fixmes
 
 Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957
 
@@ -67,11 +67,11 @@ Or
 
 Now you get a output like this:
 
-  Todonotes: todonotes_prim2.rb:12 Calculate if prime misssing (temporary: true)
+  FixMe: todonotes_prim2.rb:12 Calculate if prime misssing (temporary: true)
   1 is a prime number
-  Todonotes: todonotes_prim2.rb:12(2) Calculate if prime misssing (temporary: false)
+  FixMe: todonotes_prim2.rb:12(2) Calculate if prime misssing (temporary: false)
   2 is no prime number
-  Todonotes: todonotes_prim2.rb:12(3) Calculate if prime misssing (temporary: true)
+  FixMe: todonotes_prim2.rb:12(3) Calculate if prime misssing (temporary: true)
   ...
   ToDo : todonotes_prim2.rb:27 Return total number of primes (temporary: nil)
 

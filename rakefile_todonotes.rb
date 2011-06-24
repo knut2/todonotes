@@ -1,15 +1,14 @@
-#~ puts %x{call gem environment gemdir}
-#~ exit
-#
-#Build rake4latex-gem
+#Build todonotes-gem
 
 #
 #
 require 'knut_tools/rake/gempackager'
+require '../knut_pw.rb'
+
 $:.unshift('lib')
 require 'todonotes'
 
-$todonotes_version = "0.1.0"  #ruby 1.9
+$todonotes_version = "0.1.1"  
 
 #http://docs.rubygems.org/read/chapter/20
 rake4latexgem = Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
@@ -19,13 +18,13 @@ rake4latexgem = Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
   s.author = "Knut Lickert"
   s.email = "knut@lickert.net"
   #~ s.homepage = "http://ruby.lickert.net/todonotes"
-  #~ s.homepage = "http://gems.rubypla.net/"
+  s.homepage = "http://rubypla.net/todonotes"
   #~ s.rubyforge_project = 'todonotes'
   s.platform = Gem::Platform::RUBY
   s.summary = "Support programming by todonotes/todo commands."
   s.description = <<DESCR
 todonotes.
-Support programming by fixme/todo commands
+Support programming by fixme/todo commands.
 
 Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957
 DESCR
@@ -57,7 +56,7 @@ unittest/unittest_todonotes.rb
   #~ s.requirements << 'Optional: A (La)TeX-system if used as TeX-generator (in fact, you can create TeX-Files, but without a TeX-System you will have no fun with it ;-))'
 
   gemdef.public = true
-  #~ gemdef.add_ftp_connection('ftp.rubypla.net', Knut::FTP_RUBYPLANET_USER, Knut::FTP_RUBYPLANET_PW, "/Ruby/gemdocs/todonotes/#{$todonotes_version}")
+  gemdef.add_ftp_connection('ftp.rubypla.net', Knut::FTP_RUBYPLANET_USER, Knut::FTP_RUBYPLANET_PW, "/Ruby/gemdocs/todonotes/#{$todonotes_version}")
 
 
   gemdef.define_test( 'unittest', FileList['unittest*.rb'])
@@ -66,6 +65,10 @@ unittest/unittest_todonotes.rb
 }
 
 
+task :hanna do
+  `hanna --gems todonotes `
+  #~ `rdoc --gems docgenerator docgenerator_tools`
+end
 task :hanna_local do
   FileUtils.rm_r('doc') if File.exist?('doc')
   `hanna lib/**/*.rb readme.rd -m readme.rd `
@@ -73,16 +76,17 @@ task :hanna_local do
 end
 
 desc "Default: :readme, :gem"
-#~ task :default => :check
-#~ task :default => :test
+task :default => :check
+task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 #~ task :default => :hanna_local
 
 #~ task :default => :install
-#~ task :default => :copy
+#~ task :default => :hanna
 #~ task :default => :links
-task :default => :push
+#~ task :default => :ftp_rdoc
+#~ task :default => :push
 
 
 
