@@ -66,7 +66,9 @@ Define the singleton-instance.
 =end
   def initialize()
     # @codelines is a Hash with Filename and codelines (key). Value is the number of calls.
+    #There is no marker, if it is a todo or a fixme
     @codelines = Hash.new(0)
+    
     @logger = Log4r::Logger.new('ToDo')
     @logger.outputters = Log4r::StdoutOutputter.new('ToDo', 
                                     :level => Log4r::ALL,
@@ -98,15 +100,11 @@ The comment is logged,
 the block is evaluated to get a temporary result.
 =end
   def todo( comment, type = :ToDo, &block)
-    res = nil
-    key = caller[1].split(':in').first
-    if block_given?
-      res = yield self
-      res
-    end
-    log_todo(key, type, comment, res)
-    #~ @logger.debug("Return #{res.inspect} instead") if @logger.debug?
-    res
+    result = nil
+    codeline = caller[1].split(':in').first
+    result = yield self if block_given?
+    log_todo(codeline, type, comment, result)
+    result
   end
 =begin rdoc
 Report the ToDo/FixMe and count occurence.
@@ -114,13 +112,13 @@ Report the ToDo/FixMe and count occurence.
 The first occurence is reported as a warning, 
 next occurences are informations.
 =end
-  def log_todo( key, type, text, res )
+  def log_todo( codeline, type, text, result )
 
-    @codelines[key] += 1
-    if @codelines[key] == 1 #First occurence?
-      @logger.warn([type, "#{key} #{text} (temporary: #{res.inspect})"])
-    else  #Erste auftauchen
-      @logger.info([type, "#{key}(#{@codelines[key]}) #{text} (temporary: #{res.inspect})"])
+    @codelines[codeline] += 1
+    if @codelines[codeline] == 1 #First occurence?
+      @logger.warn([type, "#{codeline} #{text} (temporary: #{result.inspect})"])
+    else  #2nd or more calls
+      @logger.info([type, "#{codeline}(#{@codelines[codeline]}) #{text} (temporary: #{result.inspect})"])
     end
   end
   
