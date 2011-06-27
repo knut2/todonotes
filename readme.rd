@@ -92,18 +92,18 @@ The first call of a fixme/todo is a warning, the next call is an information.
 
 
 You may change the level with:
-  Todonotes.instance.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
-  Todonotes.instance.logger.level = Log4r::INFO   #report all calls of fixme/todo
+  Todonotes.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
+  Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
 
 You can log the fixme/todos to a file:
-  Todonotes.instance.log2file()
+  Todonotes.log2file()
 
 ==Get Overview
 You may print an overview on all fixme/todos:
   Todonotes.print_stats()
 
 Example:
-  List of ToDos/Todonotess:
+  List of ToDos/Fixmes:
   todonotes_prim.rb:11:   10 calls
   todonotes_prim.rb:21:    1 call
 

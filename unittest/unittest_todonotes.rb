@@ -114,33 +114,45 @@ end
 
 class Test_overview < Test::Unit::TestCase
   def test_overview()
-    Todonotes.instance.codeline.clear
+    Todonotes.instance.codelines.clear
     
     #check empty fixme/todo
     text = "List of ToDos/FixMes:"
     codeline = {}
     assert_equal(text, Todonotes.instance.overview())
-    assert_equal(codeline, Todonotes.instance.codeline)
-    
+    assert_equal(codeline, Todonotes.instance.codelines)
+    #Check class methods
+    assert_equal(Todonotes.overview(), Todonotes.instance.overview())
+    assert_equal(Todonotes.codelines, Todonotes.instance.codelines)
+
     line = __LINE__; fixme('a')
     text << "\n#{__FILE__}:#{line}:    1 call"
     codeline["#{__FILE__}:#{line}"] = 1
     assert_equal(text, Todonotes.instance.overview())
-    assert_equal(codeline, Todonotes.instance.codeline)
+    assert_equal(codeline, Todonotes.instance.codelines)
+    #Check class methods
+    assert_equal(Todonotes.overview(), Todonotes.instance.overview())
+    assert_equal(Todonotes.codelines, Todonotes.instance.codelines)
     
     #Add 2nd todo
     line = __LINE__; fixme('b')
     text << "\n#{__FILE__}:#{line}:    1 call"
     codeline["#{__FILE__}:#{line}"] = 1
     assert_equal(text, Todonotes.instance.overview())
-    assert_equal(codeline, Todonotes.instance.codeline)
+    assert_equal(codeline, Todonotes.instance.codelines)
+    #Check class methods
+    assert_equal(Todonotes.overview(), Todonotes.instance.overview())
+    assert_equal(Todonotes.codelines, Todonotes.instance.codelines)
     
     #check plural-s in calls
     line = __LINE__; 2.times{ fixme('c') }
     text << "\n#{__FILE__}:#{line}:    2 calls"
     codeline["#{__FILE__}:#{line}"] = 2
     assert_equal(text, Todonotes.instance.overview())
-    assert_equal(codeline, Todonotes.instance.codeline)
+    assert_equal(codeline, Todonotes.instance.codelines)
+    #Check class methods
+    assert_equal(Todonotes.overview(), Todonotes.instance.overview())
+    assert_equal(Todonotes.codelines, Todonotes.instance.codelines)
   end
 end
 
@@ -172,6 +184,5 @@ class Test_log_with_file < Test::Unit::TestCase
     Todonotes.instance.logger.outputters.pop  #
   end
 end
-
 
 __END__

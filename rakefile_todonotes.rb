@@ -100,4 +100,11 @@ end
 
 __END__
 =Changes
-0.1.0 2011-06-24: Initial version, copied from todo_gem
+0.1.0 2011-06-24: 
+* Initial version, copied from todo_gem
+
+0.1.1:
+* correction in documentation
+* example in English
+* Todonotes#codeline -> Todonotes#codelines
+* add class methods overview, codelines, logger, log2file

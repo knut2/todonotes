@@ -55,7 +55,7 @@ Singleton definition for a fixme.
 You can use Fixme#instance to set some global settings:
 * FiXme#log2file Define log file
 * FiXme#logger adapt level, outputter ...
-* FiXme#codeline get Hash with counter per ToDo-locations.
+* FiXme#codelines get Hash with counter per ToDo-locations.
 * FiXme#overview get overview text with ToDo-locations.
 =end
 class Todonotes
@@ -65,8 +65,8 @@ class Todonotes
 Define the singleton-instance.
 =end
   def initialize()
-    # @codeline is a Hash with Filename and codeline (key). Value is the number of calls.
-    @codeline = Hash.new(0)
+    # @codelines is a Hash with Filename and codelines (key). Value is the number of calls.
+    @codelines = Hash.new(0)
     @logger = Log4r::Logger.new('ToDo')
     @logger.outputters = Log4r::StdoutOutputter.new('ToDo', 
                                     :level => Log4r::ALL,
@@ -89,8 +89,8 @@ Default filename is $0.todo
                                   ))
     
   end
-  #Direct access to the codeline list. See also #todo_overview
-  attr_reader :codeline
+  #Direct access to the codelines list. See also #todo_overview
+  attr_reader :codelines
 =begin rdoc
 Report a FixMe or a ToDo.
 
@@ -116,13 +116,12 @@ next occurences are informations.
 =end
   def log_todo( key, type, text, res )
 
-    @codeline[key] += 1
-    if @codeline[key] == 1 #First occurence?
+    @codelines[key] += 1
+    if @codelines[key] == 1 #First occurence?
       @logger.warn([type, "#{key} #{text} (temporary: #{res.inspect})"])
     else  #Erste auftauchen
-      @logger.info([type, "#{key}(#{@codeline[key]}) #{text} (temporary: #{res.inspect})"])
+      @logger.info([type, "#{key}(#{@codelines[key]}) #{text} (temporary: #{res.inspect})"])
     end
-    
   end
   
 =begin rdoc
@@ -140,7 +139,7 @@ Example:
   def overview( )
     txt = []
     txt << "List of ToDos/FixMes:"
-    @codeline.each do |key, messages|
+    @codelines.each do |key, messages|
       txt << "%s: %4i call%s" % [ key, messages, messages > 1 ? 's': ''  ]
     end
     txt.join("\n")
@@ -155,6 +154,30 @@ See Todonotes#overview
 =end
     def print_stats()
       puts Todonotes.instance.overview()
+    end
+=begin rdoc
+See Todonotes#overview
+=end
+    def overview()
+      Todonotes.instance.overview()
+    end
+=begin rdoc
+See Todonotes#codelines
+=end
+    def codelines()
+      Todonotes.instance.codelines()
+    end
+=begin rdoc
+See Todonotes#logger
+=end
+    def logger()
+      Todonotes.instance.logger()
+    end
+=begin rdoc
+See Todonotes#log2file
+=end
+    def log2file(filename = File.basename($0) + '.todo', level = Log4r::ALL)
+      Todonotes.instance.log2file(filename, level)
     end
   end #<< self
 end
@@ -207,5 +230,7 @@ if $0 == __FILE__
   2.times{todo { "result" }}
   fixme { "result" }
   to('a') 
-  Todonotes.print_stats( )
+  #~ Todonotes.print_stats( )
+  puts Todonotes.overview( )
+  puts Todonotes.codelines( )
 end
