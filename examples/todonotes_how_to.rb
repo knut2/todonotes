@@ -1,38 +1,55 @@
 $:.unshift('../lib')
 require 'todonotes'
 
+#a ToDo with default text 'ToDo' and without temporary result
 to do 
-  "mein Ergebnis"
+  "my temporary result"
 end
 
-todo "mein Text"
+#a ToDo without temporary result
+todo "my description of the missing code"
 
-todo { "mein Ergebnis" }
+#a ToDo without description, but a temporary result
+todo { "my temporary result" }
 
-todo ('mein Text' ) { "mein Ergebnis" }
+#a ToDo with description and temporary result
+todo ('my description of the missing code' ) { "my temporary result" }
 
+
+#a ToDo without description, but a temporary result
 todo do
-  "mein Ergebnis"
+  "my temporary result"
 end
 
+#a ToDo with description and temporary result
 todo 'Text' do
-  "mein Ergebnis"
+  "my temporary result"
 end
 
 ####################
-2.times { fixme "mein Text" }
 
-fixme { "mein Ergebnis" }
+#a FixMe without description, but a temporary result
+fixme { "my temporary result" }
 
-fixme ('mein Text' ) { "mein Ergebnis" }
+#a FixMe with description and temporary result
+fixme ('my description if the wrong code' ) { "my temporary result" }
 
+#a FixMe without description, but a temporary result
 fixme do
-  "mein Ergebnis"
+  "my temporary result"
 end
 
-fixme 'Text' do
-  "mein Ergebnis"
+#a FixMe with description and temporary result
+fixme 'my description if the wrong code' do
+  "my temporary result"
 end
 ####################
+#a Fixme is called twice
+2.times { fixme "my description of the missing code" }
+#a ToDo is called three times
+3.times { todo  "my description of the missing code" }
 
+####################
+
+#Get an overview of all ToDos and FixMes
 Todonotes.print_stats

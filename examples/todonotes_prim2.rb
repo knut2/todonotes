@@ -1,10 +1,18 @@
+=begin rdoc
+Write a script to count all prime between 1 to 10.
+
+For each number, write a message like
+  x is [a|no] prime number
+
+Until you know, how to determine, if a number is a prime,
+you can take the temporary algorithm: each odd number is a prime.
+=end
 $:.unshift('../lib')
 require 'todonotes'
 
 #
-#
-Todonotes.instance.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
-Todonotes.instance.logger.level = Log4r::INFO   #report all calls of fixme/todo
+Todonotes.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
+Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
 
 class Fixnum
   def prime?
