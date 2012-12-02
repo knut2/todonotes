@@ -1,4 +1,5 @@
 =begin rdoc
+=Example of usage fixme/todo 
 Write a script to count all prime between 1 to 10.
 
 For each number, write a message like
@@ -12,10 +13,10 @@ require 'todonotes'
 
 #
 Todonotes.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
-Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
+#~ Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
 
 primecount = 0
-for i in 1..10
+10.times do|i|
         if fixme "Calculate if prime" do 
               i.odd?  #tempory: odd = prim
             end
@@ -29,5 +30,5 @@ end
 todo "Return total number of primes"
 
 #Details
-Todonotes.print_stats()
+puts Todonotes.print_stats()
 

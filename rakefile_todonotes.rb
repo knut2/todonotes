@@ -8,7 +8,7 @@ require '../knut_pw.rb'
 $:.unshift('lib')
 require 'todonotes'
 
-$todonotes_version = "0.1.1"  
+$todonotes_version = "0.1.2.pre"  
 
 #http://docs.rubygems.org/read/chapter/20
 rake4latexgem = Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
@@ -53,7 +53,10 @@ unittest/unittest_todonotes.rb
   s.extra_rdoc_files = %w{
     readme.rdoc
   }
-  s.rdoc_options << '--main' << 'readme.rdoc'
+    #~ examples/todonotes_how_to.rb
+    #~ examples/todonotes_prim.rb
+    #~ examples/todonotes_prim2.rb
+  s.rdoc_options << 'lib/**/*.rb' << '--main readme.rdoc' #<< '-f hanna'
   
   #~ s.add_development_dependency('more_unit_test', '> 0.0.2')  #assert_equal_filecontent
   s.add_dependency('log4r') 
@@ -68,11 +71,15 @@ unittest/unittest_todonotes.rb
 
 }
 
+#~ task :hanna do
+  #~ `gem rdoc todonotes -f hanna`
+#~ end
+
 
 task :hanna_local do
   FileUtils.rm_r('doc') if File.exist?('doc')
-  `rdoc -f hanna lib/**/*.rb readme.rdoc -m readme.rdoc `
-  #~ `rdoc -f hanna lib/**/*.rb readme.rdoc manpage_elements.rb -m readme.rdoc -t "rdoc docgenerator"`
+  `rdoc  -f hanna  #{rake4latexgem.spec.rdoc_options.join(" ")} #{rake4latexgem.spec.extra_rdoc_files.join(' ')}`
+  #~ `rdoc -f hanna lib/**/*.rb readme.rdoc -m readme.rdoc `
 end
 
 desc "Default: :readme, :gem"
@@ -81,6 +88,7 @@ desc "Default: :readme, :gem"
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 task :default => :hanna_local
+#~ task :default => :hanna
 
 #~ task :default => :install
 #~ task :default => :links
@@ -108,3 +116,5 @@ __END__
 * Todonotes#codeline -> Todonotes#codelines
 * Implement module Todonotes with methods overview, codelines, logger, log2file
 
+0.1.2:
+* 

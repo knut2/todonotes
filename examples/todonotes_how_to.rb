@@ -1,3 +1,6 @@
+=begin rdoc
+Examples of the different syntax version of the fixme/and todo-command.
+=end
 $:.unshift('../lib')
 require 'todonotes'
 

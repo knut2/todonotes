@@ -5,6 +5,8 @@ Define todo- and fixme-command to mark open topics during software development.
 Add _todo_ and _fixme_ to your code and get track of your todos during 
 runtime of your code.
 
+Productive programms should not use this gem.
+
 When you pass a todo/fixme during execution, you get a logging information.
 
   todo ('message' ) { "temporary result" }
@@ -15,10 +17,10 @@ todo and fixme have the same syntax, the sematic meaning is:
 * FixMe: Mark code to repair.
 
 Disadvantage:
-* Does not replace a good IDE. 
-  to see the ToDo/Fixmes
+* Does not replace a good IDE to find the ToDo/Fixmes.
 
-Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957
+
+This Gem is based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957
 
 =Example
 
@@ -31,7 +33,7 @@ So you can start your program:
 
   primecount = 0
   for i in 1..10
-          if fixme "Calculate if prime, prim = true, ja, sonst nein" do 
+          if fixme "Calculate if prime, temporary: true for odd numbers" do 
                 i.odd?  #tempory: odd = prim
               end
             primecount += 1 
@@ -85,14 +87,19 @@ You are informed about source code file and line number. In braces you get the n
 The todo/fixme command evaluates the optional block.
 The result is returned as a temporary result (in this example: odd numbers are primes.).
 
+
+Please refer the examples folder for more details.
+
 ==Logging
 
-The Fixme and ToDo are reported via a logger.
+The Fixme's and ToDo's are reported via a logger (log4r).
+
 The first call of a fixme/todo is a warning, the next call is an information.
+With this logic you can decide, if you want to see each call or only the first call.
 
 
 You may change the level with:
-  Todonotes.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
+  Todonotes.logger.level = Log4r::WARN #only first time of a call of a fixme/todo
   Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
 
 You can log the fixme/todos to a file:
