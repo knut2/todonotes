@@ -30,7 +30,7 @@ Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=1195
 DESCR
   s.require_path = "lib"
   s.files = %w{
-readme.rd
+readme.rdoc
 lib/todonotes.rb
 lib/todonotes/todonotes.rb
 lib/todonotes/todo.rb
@@ -51,9 +51,9 @@ unittest/unittest_todonotes.rb
 
   s.has_rdoc	= true  
   s.extra_rdoc_files = %w{
-    readme.rd
+    readme.rdoc
   }
-  s.rdoc_options << '--main' << 'readme.rd'
+  s.rdoc_options << '--main' << 'readme.rdoc'
   
   #~ s.add_development_dependency('more_unit_test', '> 0.0.2')  #assert_equal_filecontent
   s.add_dependency('log4r') 
@@ -69,14 +69,10 @@ unittest/unittest_todonotes.rb
 }
 
 
-task :hanna do
-  `rdoc -f hanna --gems todonotes `
-  #~ `rdoc --gems docgenerator docgenerator_tools`
-end
 task :hanna_local do
   FileUtils.rm_r('doc') if File.exist?('doc')
-  `rdoc -f hanna lib/**/*.rb readme.rd -m readme.rd `
-  #~ `rdoc -f hanna lib/**/*.rb readme.rd manpage_elements.rb -m readme.rd -t "rdoc docgenerator"`
+  `rdoc -f hanna lib/**/*.rb readme.rdoc -m readme.rdoc `
+  #~ `rdoc -f hanna lib/**/*.rb readme.rdoc manpage_elements.rb -m readme.rdoc -t "rdoc docgenerator"`
 end
 
 desc "Default: :readme, :gem"
@@ -84,10 +80,9 @@ desc "Default: :readme, :gem"
 #~ task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
-#~ task :default => :hanna_local
+task :default => :hanna_local
 
 #~ task :default => :install
-task :default => :hanna
 #~ task :default => :links
 #~ task :default => :ftp_rdoc
 #~ task :default => :push
