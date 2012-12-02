@@ -8,7 +8,7 @@ require '../knut_pw.rb'
 $:.unshift('lib')
 require 'todonotes'
 
-$todonotes_version = "0.1.1"  
+$todonotes_version = "0.1.2.pre"  
 
 #http://docs.rubygems.org/read/chapter/20
 rake4latexgem = Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
@@ -84,7 +84,7 @@ end
 
 desc "Default: :readme, :gem"
 #~ task :default => :check
-#~ task :default => :test
+task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 #~ task :default => :hanna_local
@@ -93,7 +93,7 @@ desc "Default: :readme, :gem"
 #~ task :default => :install
 #~ task :default => :links
 #~ task :default => :ftp_rdoc
-task :default => :push
+#~ task :default => :push
 
 
 
@@ -115,6 +115,10 @@ __END__
 * example in English
 * Todonotes#codeline -> Todonotes#codelines
 * Implement module Todonotes with methods overview, codelines, logger, log2file
+
+See also 
+* http://stackoverflow.com/questions/13668068/ruby-how-to-signal-not-implemented-yet
+* http://stackoverflow.com/a/13668213/676874
 
 0.1.2:
 * 
