@@ -39,7 +39,7 @@ Encapsuate:
 * Todonotes::FixmeFormatter
 =end
 module Todonotes
-  VERSION = '0.1.1.beta'
+  VERSION = '0.1.1'
   #'singleton'-instance of Todonotes
   TODONOTES = Todonotes.new()
 =begin rdoc

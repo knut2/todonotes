@@ -8,7 +8,7 @@ require '../knut_pw.rb'
 $:.unshift('lib')
 require 'todonotes'
 
-$todonotes_version = "0.1.1.beta"  
+$todonotes_version = "0.1.1"  
 
 #http://docs.rubygems.org/read/chapter/20
 rake4latexgem = Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
@@ -70,24 +70,24 @@ unittest/unittest_todonotes.rb
 
 
 task :hanna do
-  `hanna --gems todonotes `
+  `rdoc -f hanna --gems todonotes `
   #~ `rdoc --gems docgenerator docgenerator_tools`
 end
 task :hanna_local do
   FileUtils.rm_r('doc') if File.exist?('doc')
-  `hanna lib/**/*.rb readme.rd -m readme.rd `
+  `rdoc -f hanna lib/**/*.rb readme.rd -m readme.rd `
   #~ `rdoc -f hanna lib/**/*.rb readme.rd manpage_elements.rb -m readme.rd -t "rdoc docgenerator"`
 end
 
 desc "Default: :readme, :gem"
-task :default => :check
-task :default => :test
+#~ task :default => :check
+#~ task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 #~ task :default => :hanna_local
 
 #~ task :default => :install
-#~ task :default => :hanna
+task :default => :hanna
 #~ task :default => :links
 #~ task :default => :ftp_rdoc
 #~ task :default => :push
@@ -107,8 +107,9 @@ __END__
 0.1.0 2011-06-24: 
 * Initial version, copied from todo_gem
 
-0.1.1:
+0.1.1 2012-12-02
 * correction in documentation
 * example in English
 * Todonotes#codeline -> Todonotes#codelines
 * Implement module Todonotes with methods overview, codelines, logger, log2file
+
