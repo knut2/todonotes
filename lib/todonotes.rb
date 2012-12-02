@@ -26,202 +26,64 @@ Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=1195
 require 'singleton'
 require 'log4r'
 
-=begin rdoc
-Define a formatter.
-=end
-class Log4r::FixmeFormatter < Log4r::BasicFormatter
-=begin rdoc
-If event is an Array, the output is adapted.
-
-This outputter is only for internal use via Todonotes.
-=end
-    def format(event)
-      #@@basicformat      "%*s %s"
-      #~ buff = sprintf("%-*s %-5s", Log4r::MaxLevelLength, Log4r::LNAMES[event.level],
-             #~ event.data.is_a?(Array) ? event.data.first : event.name)
-      buff = "%-5s" % (event.data.is_a?(Array) ? event.data.first : event.name)
-      #~ buff += (event.tracer.nil? ? "" : "(#{event.tracer[2]})") + ": "
-      buff << ": "
-      buff << format_object(event.data.is_a?(Array) ? event.data.last : event.data) 
-      buff << (event.tracer.nil? ? "" : " (#{event.tracer.join('/')})")
-      buff << "\n"
-      buff
-    end
-end
+require_relative 'todonotes/todonotes'
+require_relative 'todonotes/todo'
+require_relative 'todonotes/log4r'
+require_relative 'todonotes/kernel'
 
 =begin rdoc
-Singleton definition for a fixme.
+Module Todonotes.
 
-You can use Fixme#instance to set some global settings:
-* FiXme#log2file Define log file
-* FiXme#logger adapt level, outputter ...
-* FiXme#codelines get Hash with counter per ToDo-locations.
-* FiXme#overview get overview text with ToDo-locations.
+Encapsuate:
+* Todonotes::Todonotes (Singleton)
+* Todonotes::FixmeFormatter
 =end
-class Todonotes
+module Todonotes
   VERSION = '0.1.1.beta'
-  include Singleton
+  #'singleton'-instance of Todonotes
+  TODONOTES = Todonotes.new()
 =begin rdoc
-Define the singleton-instance.
-=end
-  def initialize()
-    # @codelines is a Hash with Filename and codelines (key). Value is the number of calls.
-    #There is no marker, if it is a todo or a fixme
-    @codelines = Hash.new(0)
-    
-    @logger = Log4r::Logger.new('ToDo')
-    @logger.outputters = Log4r::StdoutOutputter.new('ToDo', 
-                                    :level => Log4r::ALL,
-                                    :formatter => Log4r::FixmeFormatter 
-                                  )
-    #~ @logger.trace = true
-  end
-  #Get logger to define alternative outputters...
-  attr_reader :logger
-=begin rdoc
-Write the todo's in a logging file.
-
-Default filename is $0.todo
-=end
-  def log2file(filename = File.basename($0) + '.todo', level = Log4r::ALL)
-    @logger.add( Log4r::FileOutputter.new('ToDo', 
-                                    :filename => filename,
-                                    :level => level,
-                                    :formatter => Log4r::FixmeFormatter 
-                                  ))
-    
-  end
-  #Direct access to the codelines list. See also #todo_overview
-  attr_reader :codelines
-=begin rdoc
-Report a FixMe or a ToDo.
-
-The comment is logged, 
-the block is evaluated to get a temporary result.
-=end
-  def todo( comment, type = :ToDo, &block)
-    result = nil
-    codeline = caller[1].split(':in').first
-    result = yield self if block_given?
-    log_todo(codeline, type, comment, result)
-    result
-  end
-=begin rdoc
-Report the ToDo/FixMe and count occurence.
-
-The first occurence is reported as a warning, 
-next occurences are informations.
-=end
-  def log_todo( codeline, type, text, result )
-
-    @codelines[codeline] += 1
-    if @codelines[codeline] == 1 #First occurence?
-      @logger.warn([type, "#{codeline} #{text} (temporary: #{result.inspect})"])
-    else  #2nd or more calls
-      @logger.info([type, "#{codeline}(#{@codelines[codeline]}) #{text} (temporary: #{result.inspect})"])
-    end
-  end
-  
-=begin rdoc
-Return a text to be printed
-  puts Todonotes.instance.todo_overview()
-Used from Todonotes.print_stats
-
-Example:
-  List of ToDos/FixMes:
-  fixme.rb:195:    1 call
-  fixme.rb:198:    2 calls
-  fixme.rb:199:    1 call
-  fixme.rb:200:    1 call
-=end
-  def overview( )
-    txt = []
-    txt << "List of ToDos/FixMes:"
-    @codelines.each do |key, messages|
-      txt << "%s: %4i call%s" % [ key, messages, messages > 1 ? 's': ''  ]
-    end
-    txt.join("\n")
-  end
-
-=begin rdoc
-Class methods
+Define module-methods
 =end
   class << self
+    
 =begin rdoc
-See Todonotes#overview
+See Todonotes::Todonotes#overview
 =end
-    def print_stats()
-      puts Todonotes.instance.overview()
+    def print_stats( with_type = false )
+      TODONOTES.overview( with_type )
     end
 =begin rdoc
-See Todonotes#overview
+See Todonotes::Todonotes#overview
 =end
-    def overview()
-      Todonotes.instance.overview()
+    def overview(*settings )
+      TODONOTES.overview( *settings )
     end
 =begin rdoc
-See Todonotes#codelines
+See Todonotes::Todonotes#codelines
 =end
     def codelines()
-      Todonotes.instance.codelines()
+      TODONOTES.codelines()
     end
 =begin rdoc
-See Todonotes#logger
+See Todonotes::Todonotes#logger
 =end
     def logger()
-      Todonotes.instance.logger()
+      TODONOTES.logger()
     end
 =begin rdoc
-See Todonotes#log2file
+See Todonotes::Todonotes#log2file
 =end
     def log2file(filename = File.basename($0) + '.todo', level = Log4r::ALL)
-      Todonotes.instance.log2file(filename, level)
+      TODONOTES.log2file(filename, level)
     end
-  end #<< self
-end
+  end #Todonotes-module mthods
+end #module Todonotes
 
-=begin rdoc
-Define todo-commands to global usage.
-=end
-module Kernel
-=begin rdoc
-Usage 1 (only message):
-  todo "my todo-message""
 
-Usage 2 (only temporary result):
-  todo { "temporary result" }
-  todo do
-    "temporary result"
-  end
-
-Usage 3(message and temporary result):
-  todo ('message') { "temporary  result" }
-  todo ('message') do
-    "temporary result"
-  end
-
-=end
-  def todo( comment = 'ToDo', &block)
-    Todonotes.instance.todo(comment, &block)
-  end
-=begin rdoc
-Usage:
-  to do 
-    :result
-  end
-=end
-  alias :to :todo
-=begin rdoc
-Add a fixme-command.
-
-Can be used to mark available code.
-=end
-  def fixme( comment = 'FixMe', &block)
-    Todonotes.instance.todo(comment, :FixMe, &block)
-  end  
-end
-
+#Some testcode as "quick test"
 if $0 == __FILE__
+  
   todo( 'a' ){  
     "result" 
   }
@@ -229,6 +91,10 @@ if $0 == __FILE__
   fixme { "result" }
   to('a') 
   #~ Todonotes.print_stats( )
-  puts Todonotes.overview( )
+  #~ puts Todonotes.overview( )
+  #~ puts Todonotes.overview( :with_type )
+  #~ puts Todonotes.overview( :with_type, :with_shortdescription )
+  puts Todonotes.overview( :with_type, :with_shortdescription, :with_result )
+
   puts Todonotes.codelines( )
 end

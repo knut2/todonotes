@@ -8,7 +8,7 @@ require '../knut_pw.rb'
 $:.unshift('lib')
 require 'todonotes'
 
-$todonotes_version = "0.1.1"  
+$todonotes_version = "0.1.1.beta"  
 
 #http://docs.rubygems.org/read/chapter/20
 rake4latexgem = Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
@@ -32,6 +32,10 @@ DESCR
   s.files = %w{
 readme.rd
 lib/todonotes.rb
+lib/todonotes/todonotes.rb
+lib/todonotes/todo.rb
+lib/todonotes/kernel.rb
+lib/todonotes/log4r.rb
 examples/todonotes_how_to.rb
 examples/todonotes_prim.rb
 examples/todonotes_prim2.rb
@@ -107,4 +111,4 @@ __END__
 * correction in documentation
 * example in English
 * Todonotes#codeline -> Todonotes#codelines
-* add class methods overview, codelines, logger, log2file
+* Implement module Todonotes with methods overview, codelines, logger, log2file
