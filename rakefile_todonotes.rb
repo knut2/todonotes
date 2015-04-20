@@ -8,7 +8,12 @@ require '../knut_pw.rb'
 $:.unshift('lib')
 require 'todonotes/version'
 
-$todonotes_version = "0.2.0"  
+$todonotes_version = "0.2.1.beta"  
+if $todonotes_version != Todonotes::VERSION
+  puts "BETA!"
+#~ $todonotes_version = Todonotes::VERSION
+end
+
 
 #http://docs.rubygems.org/read/chapter/20
 rake4latexgem = Knut::Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
@@ -85,16 +90,16 @@ end
 
 desc "Default: :readme, :gem"
 #~ task :default => :check
-#~ task :default => :test
+task :default => :test
 #~ task :default => :readme
-task :default => [ :gem ]
-task :default => :hanna_local
+#~ task :default => [ :gem ]
+#~ task :default => :hanna_local
 #~ task :default => :hanna
 
 #~ task :default => :install
 #~ task :default => :links
 #~ task :default => :ftp_rdoc
-task :default => :push
+#~ task :default => :push
 
 
 

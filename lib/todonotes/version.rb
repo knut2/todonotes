@@ -20,5 +20,5 @@ See also
 * raise NotImplementedError on request
 =end
 module Todonotes
-  VERSION = '0.2.0'
+  VERSION = '0.2.1'
 end
