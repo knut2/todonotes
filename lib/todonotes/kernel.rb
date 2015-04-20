@@ -34,6 +34,8 @@ Usage:
 Add a fixme-command.
 
 Can be used to mark available code.
+
+See also #todo for the usage.
 =end
   def fixme( comment = 'FixMe', &block)
     raise NotImplementedError if Todonotes::TODONOTES.raise_fixme?

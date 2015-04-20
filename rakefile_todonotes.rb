@@ -6,9 +6,9 @@ require 'knut/gempackager'
 require '../knut_pw.rb'
 
 $:.unshift('lib')
-require 'todonotes'
+require 'todonotes/version'
 
-$todonotes_version = "0.1.2.pre"  
+$todonotes_version = "0.2.0"  
 
 #http://docs.rubygems.org/read/chapter/20
 rake4latexgem = Knut::Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
@@ -23,10 +23,9 @@ rake4latexgem = Knut::Gem_packer.new('todonotes', $todonotes_version){ |gemdef, 
   s.platform = Gem::Platform::RUBY
   s.summary = "Support programming by todonotes/todo commands."
   s.description = <<DESCR
-todonotes.
 Support programming by fixme/todo commands.
-
-Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957
+Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957, 
+see also http://stackoverflow.com/a/13668213/676874
 DESCR
   s.require_path = "lib"
   s.files = %w{
@@ -36,6 +35,7 @@ lib/todonotes/todonotes.rb
 lib/todonotes/todo.rb
 lib/todonotes/kernel.rb
 lib/todonotes/log4r.rb
+lib/todonotes/version.rb
 examples/todonotes_how_to.rb
 examples/todonotes_prim.rb
 examples/todonotes_prim2.rb
@@ -59,8 +59,8 @@ unittest/minitest_todonotes.rb
   s.rdoc_options << 'lib/**/*.rb' << '--main readme.rdoc' #<< '-f hanna'
   
   #~ s.add_development_dependency('more_unit_test', '> 0.0.2')  #assert_equal_filecontent
-  s.add_development_dependency('minitest-logger', '>= 0.1.0')
-  s.add_dependency('log4r') 
+  s.add_development_dependency('minitest-logger', '~> 0', '>= 0.1.1')
+  s.add_dependency('log4r', '~> 0') 
   #~ s.requirements << 'Optional: A (La)TeX-system if used as TeX-generator (in fact, you can create TeX-Files, but without a TeX-System you will have no fun with it ;-))'
 
   gemdef.public = true
@@ -85,16 +85,16 @@ end
 
 desc "Default: :readme, :gem"
 #~ task :default => :check
-task :default => :test
+#~ task :default => :test
 #~ task :default => :readme
-#~ task :default => [ :gem ]
+task :default => [ :gem ]
 task :default => :hanna_local
 #~ task :default => :hanna
 
 #~ task :default => :install
 #~ task :default => :links
 #~ task :default => :ftp_rdoc
-#~ task :default => :push
+task :default => :push
 
 
 
@@ -107,25 +107,3 @@ end
 
 
 __END__
-=Changes
-0.1.0 2011-06-24: 
-* Initial version, copied from todo_gem
-
-0.1.1 2012-12-02
-* correction in documentation
-* example in English
-* Todonotes#codeline -> Todonotes#codelines
-* Implement module Todonotes with methods overview, codelines, logger, log2file
-
-See also 
-* http://stackoverflow.com/questions/13668068/ruby-how-to-signal-not-implemented-yet
-* http://stackoverflow.com/a/13668213/676874
-
-0.1.2:
-* Use Minitest
-* Evaluate block for each call (allows dynamic results)
-
-
-
-Fixmes:
-use raise NotImplementedError

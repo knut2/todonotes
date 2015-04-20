@@ -20,7 +20,7 @@ Disadvantage:
   to see the ToDo/FixMe 
 
 Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957
-
+See also http://stackoverflow.com/a/13668213/676874
 =end
 
 require 'singleton'
@@ -39,7 +39,6 @@ Encapsuate:
 * Todonotes::FixmeFormatter
 =end
 module Todonotes
-  VERSION = '0.1.2.pre'
   #'singleton'-instance of Todonotes
   TODONOTES = Todonotes.new()
 =begin rdoc

@@ -115,3 +115,15 @@ Example:
   todonotes_prim.rb:21:    1 call
 
 There is a fixme/todo in line 11 and 21 in todonotes_prim.rb.
+
+==Go productive
+Before you go productive with your application you should remove this
+gem and delete all fixme- and todo-commands.
+
+You may also set 
+
+  Todonotes::TODONOTES.raise_fixme = true
+  Todonotes::TODONOTES.raise_todo = true
+  
+After this you will get a ImplementationError-Exception if Kernel#fixme or Kernel.todo is called.
+
