@@ -25,9 +25,19 @@ Define the singleton-instance.
                                       :formatter => FixmeFormatter 
                                     )
       #~ @logger.trace = true
+      @raise_todo = false
+      @raise_fixme = false
+
     end
     #Get logger to define alternative outputters...
     attr_reader :logger
+    attr_writer :raise_todo
+    attr_writer :raise_fixme
+    #Check if a todo should throw an exception
+    def raise_todo?; @raise_todo; end
+    #Check if a fixme should throw an exception
+    def raise_fixme?; @raise_fixme;end
+
 =begin rdoc
 Write the todo's in a logging file.
 

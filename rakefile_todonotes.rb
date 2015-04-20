@@ -124,3 +124,8 @@ See also
 0.1.2:
 * Use Minitest
 * Evaluate block for each call (allows dynamic results)
+
+
+
+Fixmes:
+use raise NotImplementedError

@@ -20,6 +20,7 @@ Usage 3(message and temporary result):
 
 =end
   def todo( comment = 'ToDo', &block)
+    raise NotImplementedError if Todonotes::TODONOTES.raise_todo?
     Todonotes::TODONOTES.todo(comment, &block)
   end
 =begin rdoc
@@ -35,6 +36,7 @@ Add a fixme-command.
 Can be used to mark available code.
 =end
   def fixme( comment = 'FixMe', &block)
+    raise NotImplementedError if Todonotes::TODONOTES.raise_fixme?
     Todonotes::TODONOTES.todo(comment, :FixMe, &block)
   end    
 end #module Kernel

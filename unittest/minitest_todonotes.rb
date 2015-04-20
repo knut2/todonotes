@@ -40,6 +40,17 @@ class Test_value_and_log < Minitest::Test
     assert_equal(nil, fixme( "my text"))
     assert_log("FixMe: #{__FILE__}:#{__LINE__} my text (temporary: nil)\n"){ fixme( "my text") }
   end
+  
+  def test_raise_fixme
+    Todonotes::TODONOTES.raise_fixme = true
+    assert_raises(NotImplementedError){ fixme }
+    Todonotes::TODONOTES.raise_fixme = false  #reset again the default
+  end
+  def test_raise_todo
+    Todonotes::TODONOTES.raise_todo = true
+    assert_raises(NotImplementedError){ todo }
+    Todonotes::TODONOTES.raise_todo = false  #reset again the default
+  end
 end
 
 class Test_overview < Minitest::Test

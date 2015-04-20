@@ -8,6 +8,8 @@ require 'todonotes'
 #Decide if we want to get only the first or all
 Todonotes.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
 Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
+#~ Todonotes::TODONOTES.raise_fixme = true #Throw exception if a fixme is evaluated
+#~ Todonotes::TODONOTES.raise_todo = true #Throw exception if a todo is evaluated
 
 
 desc "Show examples of todo-command"
