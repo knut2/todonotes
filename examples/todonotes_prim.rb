@@ -21,7 +21,7 @@ primecount = 0
               i.odd?  #tempory: odd = prim
             end
           primecount += 1 
-          puts "#{i} is a prime number"
+          puts "#{i} is a  prime number"
         else
           puts "#{i} is no prime number"
         end

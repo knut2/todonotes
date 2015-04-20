@@ -13,23 +13,24 @@ require 'todonotes'
 
 #
 Todonotes.logger.level = Log4r::WARN #only first time of callinf a fixme/todo
-Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
+#~ Todonotes.logger.level = Log4r::INFO   #report all calls of fixme/todo
 
 class Fixnum
   #Decide if Fixnum is a prime.
   #This method is only a temporarysolution.
   def prime?
       fixme "Calculate if prime" do 
-              self.odd?  #tempory: odd = prim
+              self.odd?  #tempory: odd = prime
       end    
   end
 end
+
 
 primecount = 0
 10.times do|i|
         if i.prime?
           primecount += 1 
-          puts "#{i} is a prime number"
+          puts "#{i} is a  prime number"
         else
           puts "#{i} is no prime number"
         end

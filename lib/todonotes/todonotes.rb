@@ -11,56 +11,56 @@ You can set settings with
 * Todonotes::Todonotes#codelines get Hash with counter per ToDo-locations.
 * Todonotes::Todonotes#overview get overview text with ToDo-locations.
 =end
-class Todonotes
+  class Todonotes
 
 =begin rdoc
 Define the singleton-instance.
 =end
-  def initialize()
-    @codelines = Hash.new()
-    
-    @logger = Log4r::Logger.new('ToDo')
-    @logger.outputters = Log4r::StdoutOutputter.new('ToDo', 
-                                    :level => Log4r::ALL,
-                                    :formatter => FixmeFormatter 
-                                  )
-    #~ @logger.trace = true
-  end
-  #Get logger to define alternative outputters...
-  attr_reader :logger
+    def initialize()
+      @codelines = Hash.new()
+      
+      @logger = Log4r::Logger.new('ToDo')
+      @logger.outputters = Log4r::StdoutOutputter.new('ToDo', 
+                                      :level => Log4r::ALL,
+                                      :formatter => FixmeFormatter 
+                                    )
+      #~ @logger.trace = true
+    end
+    #Get logger to define alternative outputters...
+    attr_reader :logger
 =begin rdoc
 Write the todo's in a logging file.
 
 Default filename is $0.todo
 =end
-  def log2file(filename = File.basename($0) + '.todo', level = Log4r::ALL)
-    @logger.add( Log4r::FileOutputter.new('ToDo', 
-                                    :filename => filename,
-                                    :level => level,
-                                    :formatter => FixmeFormatter 
-                                  ))
-    
-  end
-  #Direct access to the codelines list. See also #overview
-  #Accessible via Todonotes::Todonotes.instance.codelines()
-  attr_reader :codelines
+    def log2file(filename = File.basename($0) + '.todo', level = Log4r::ALL)
+      @logger.add( Log4r::FileOutputter.new('ToDo', 
+                                      :filename => filename,
+                                      :level => level,
+                                      :formatter => FixmeFormatter 
+                                    ))
+      
+    end
+    #Direct access to the codelines list. See also #overview
+    #Accessible via Todonotes::Todonotes.instance.codelines()
+    attr_reader :codelines
 =begin rdoc
 Report a FixMe or a ToDo.
 Create a Todonotes::Todo
 
 The block is evaluated to get a temporary result.
 =end
-  def todo( comment, type = :ToDo, &block)
-    codeline = caller[1].split(':in').first
-    codelinekey = "#{codeline} (#{type})"
+    def todo( comment, type = :ToDo, &block)
+      codeline = caller[1].split(':in').first
+      codelinekey = "#{codeline} (#{type})"
 
-    if @codelines[codelinekey] #2nd or more calls
-      @codelines[codelinekey].call
-    else #First occurence?
-      @codelines[codelinekey] = Todo.new(codeline, type, comment, @logger, &block)
-    end 
-    @codelines[codelinekey].result
-  end #todo
+      if @codelines[codelinekey] #2nd or more calls
+        @codelines[codelinekey].call &block
+      else #First occurence?
+        @codelines[codelinekey] = Todo.new(codeline, type, comment, @logger, &block)
+      end 
+      @codelines[codelinekey].result
+    end #todo
   
 =begin rdoc
 Return a text to be printed
@@ -85,13 +85,13 @@ Example :with_type:
   todonotes.rb:234 (FixMe):    1 call
   todonotes.rb:235 (ToDo):    1 call
 =end
-  def overview( *settings )
-    txt = []
-    txt << "List of ToDos/FixMes:"
-    @codelines.each do |key, todo|
-      txt << todo.infoline(settings)
+    def overview( *settings )
+      txt = []
+      txt << "List of ToDos/FixMes:"
+      @codelines.each do |key, todo|
+        txt << todo.infoline(settings)
+      end
+      txt.join("\n")
     end
-    txt.join("\n")
-  end
-end #class Todonotes
+  end #class Todonotes
 end #module Todonotes

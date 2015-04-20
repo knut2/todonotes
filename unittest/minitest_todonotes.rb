@@ -1,121 +1,58 @@
-gem 'test-unit'
-require 'test/unit'
+gem 'minitest'
+gem 'minitest-logger'
+$:.unshift('c:/usr/script/minitest-logger/lib')
+
+require 'minitest/autorun'
+require 'minitest/log4r'
 
 $:.unshift('../lib')
 require 'todonotes'
+Todonotes::TODONOTES.logger.outputters.first.level = Log4r::OFF #No visible logging output 
 
-=begin rdoc
-Define a new outputter to catch data into an array
-=end
-class ArrayOutputter < Log4r::StdoutOutputter
-=begin rdoc
-Collect messages in array.
-=end
-  def write(message)
-    @messages ||= []  #create with first call
-    @messages  << message
-  end
-=begin rdoc
-Clear message array and return messages
-=end
-  def flush
-    @messages ||= []  #create with first call
-    messages = @messages.dup
-    @messages.clear
-    messages
-  end
-end #ArrayOutputter
-
-#~ Todonotes::TODONOTES.logger.level = Log4r::OFF  #No logging
-Todonotes::TODONOTES.logger.outputters.first.level = Log4r::OFF
-Todonotes::TODONOTES.logger.outputters << $testlog = ArrayOutputter.new('testlog')
-$testlog.formatter = Todonotes::FixmeFormatter.new
-
-class Test_syntax < Test::Unit::TestCase
-  def test_todo()
-    assert_nothing_raised{
-      to do 
-        "mein Ergebnis"
-      end
-    }
-    assert_nothing_raised{
-      todo "mein Text"
-    }
-    assert_nothing_raised{
-      todo { "mein Ergebnis" }
-    }
-    assert_nothing_raised{
-      todo ('mein Text' ) { "mein Ergebnis" }
-    }
-    assert_nothing_raised{
-      todo do
-        "mein Ergebnis"
-      end
-    }
-    assert_nothing_raised{
-      todo 'Text' do
-        "mein Ergebnis"
-      end    
-    }
-  end
-  def test_fixme
-    assert_nothing_raised{
-      fixme "mein Text"
-    }
-    assert_nothing_raised{
-      fixme { "mein Ergebnis" }
-    }
-    assert_nothing_raised{
-      fixme ('mein Text' ) { "mein Ergebnis" }
-    }
-    assert_nothing_raised{
-      fixme do
-        "mein Ergebnis"
-      end
-    }
-    assert_nothing_raised{
-      fixme 'Text' do
-        "mein Ergebnis"
-      end    
-    }
-  end
-  #~ def test_print_stats
-    #~ assert_nothing_raised{ print_stats }
-  #~ end  
-end
-
-class Test_value_and_log < Test::Unit::TestCase
+class Test_value_and_log < Minitest::Test
   def setup()
-    $testlog.flush
+    @log = Todonotes::TODONOTES.logger
+    @formatter = Todonotes::FixmeFormatter 
   end
   
-  def test_todo()
+  def test_todo_no_comment
     assert_equal("mein Ergebnis", todo() { "mein Ergebnis" } )
-    assert_equal(["ToDo : #{__FILE__}:#{__LINE__ - 1} ToDo (temporary: \"mein Ergebnis\")\n"], $testlog.flush )
-    
-    assert_equal("mein Ergebnis", todo( 'text' ){"mein Ergebnis"} )
-    assert_equal(["ToDo : #{__FILE__}:#{__LINE__ - 1} text (temporary: \"mein Ergebnis\")\n"], $testlog.flush )
-    
-    assert_equal(nil, todo( "my text"))
-    assert_equal(["ToDo : #{__FILE__}:#{__LINE__ - 1} my text (temporary: nil)\n"], $testlog.flush )
-        
+    assert_log(" ToDo: #{__FILE__}:#{__LINE__} ToDo (temporary: \"mein Ergebnis\")\n") {todo() { "mein Ergebnis" } }
   end
-  def test_fixme
+  def test_todo_comment_and_block
+    assert_equal("mein Ergebnis", todo( 'text' ){"mein Ergebnis"} )
+    assert_log(" ToDo: #{__FILE__}:#{__LINE__ } text (temporary: \"mein Ergebnis\")\n"){ todo( 'text' ){"mein Ergebnis"} }
+  end
+  def test_todo_no_block
+    assert_equal(nil, todo( "my text"))
+    assert_log(" ToDo: #{__FILE__}:#{__LINE__} my text (temporary: nil)\n"){ todo( "my text") }
+  end
+      
+  def test_fixme_block_and_comment
+    assert_equal("mein Ergebnis", fixme( 'text' ){ "mein Ergebnis"} )
+    assert_log("FixMe: #{__FILE__}:#{__LINE__} text (temporary: \"mein Ergebnis\")\n"){ fixme( 'text' ){"mein Ergebnis"} }
+  end
+  def test_fixme_no_comment
     assert_equal("mein Ergebnis", fixme() {"mein Ergebnis"} )
-    assert_equal(["FixMe: #{__FILE__}:#{__LINE__ - 1} FixMe (temporary: \"mein Ergebnis\")\n"], $testlog.flush )
-    
-    assert_equal("mein Ergebnis", fixme( 'text' ){"mein Ergebnis"} )
-    assert_equal(["FixMe: #{__FILE__}:#{__LINE__ - 1} text (temporary: \"mein Ergebnis\")\n"], $testlog.flush )
-    
+    assert_log("FixMe: #{__FILE__}:#{__LINE__} FixMe (temporary: \"mein Ergebnis\")\n"){ fixme() {"mein Ergebnis"} }
+  end
+  def test_fixme_no_block
     assert_equal(nil, fixme( "my text"))
-    assert_equal(["FixMe: #{__FILE__}:#{__LINE__ - 1} my text (temporary: nil)\n"], $testlog.flush )
+    assert_log("FixMe: #{__FILE__}:#{__LINE__} my text (temporary: nil)\n"){ fixme( "my text") }
   end
 end
 
-class Test_overview < Test::Unit::TestCase
+class Test_overview < Minitest::Test
   def setup()
     Todonotes::TODONOTES.codelines.clear
   end
+=begin
+Show if overview is:
+
+  List of ToDos/FixMes:
+  minitest_todonotes.rb:66:    1 call
+  minitest_todonotes.rb:76:    1 call
+=end
   def test_overview()
     #check empty fixme/todo
     text = "List of ToDos/FixMes:"
@@ -196,7 +133,7 @@ class Test_overview < Test::Unit::TestCase
   end   
 end
 
-class Test_log_with_file < Test::Unit::TestCase
+class Test_log_with_file < Minitest::Test
   @@logfilename = 'test.log'
   @@logfilename_default = File.basename($0) + '.todo'
   def setup()
@@ -208,18 +145,18 @@ class Test_log_with_file < Test::Unit::TestCase
     File.delete(@@logfilename_default) if File.exist?(@@logfilename_default)
   end
   def test_logfile()
-    assert_false(File.exist?(@@logfilename))
+    refute(File.exist?(@@logfilename))
     Todonotes::TODONOTES.log2file(@@logfilename)
     assert_equal(@@logfilename, Todonotes::TODONOTES.logger.outputters.last.filename)
-    assert_true(File.exist?(@@logfilename))
+    assert(File.exist?(@@logfilename))
     Todonotes::TODONOTES.logger.outputters.last.close #
     Todonotes::TODONOTES.logger.outputters.pop  #
   end
   def test_logfile_default()
-    assert_false(File.exist?(@@logfilename_default))
+    refute(File.exist?(@@logfilename_default))
     Todonotes::TODONOTES.log2file() #no filename
     assert_equal(@@logfilename_default, Todonotes::TODONOTES.logger.outputters.last.filename)
-    assert_true(File.exist?(@@logfilename_default))
+    assert(File.exist?(@@logfilename_default))
     Todonotes::TODONOTES.logger.outputters.last.close #
     Todonotes::TODONOTES.logger.outputters.pop  #
   end

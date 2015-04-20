@@ -2,7 +2,7 @@
 
 #
 #
-require 'knut_tools/rake/gempackager'
+require 'knut/gempackager'
 require '../knut_pw.rb'
 
 $:.unshift('lib')
@@ -11,7 +11,7 @@ require 'todonotes'
 $todonotes_version = "0.1.2.pre"  
 
 #http://docs.rubygems.org/read/chapter/20
-rake4latexgem = Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
+rake4latexgem = Knut::Gem_packer.new('todonotes', $todonotes_version){ |gemdef, s|
   s.name = "todonotes"
   #major.minor.build  - see http://docs.rubygems.org/read/chapter/7
   s.version =  $todonotes_version
@@ -41,7 +41,7 @@ examples/todonotes_prim.rb
 examples/todonotes_prim2.rb
 }
   s.test_files    = %w{
-unittest/unittest_todonotes.rb
+unittest/minitest_todonotes.rb
 }
   #~ s.test_files   << Dir['unittest/expected/*']
   #~ s.test_files.flatten!
@@ -59,6 +59,7 @@ unittest/unittest_todonotes.rb
   s.rdoc_options << 'lib/**/*.rb' << '--main readme.rdoc' #<< '-f hanna'
   
   #~ s.add_development_dependency('more_unit_test', '> 0.0.2')  #assert_equal_filecontent
+  s.add_development_dependency('minitest-logger', '>= 0.1.0')
   s.add_dependency('log4r') 
   #~ s.requirements << 'Optional: A (La)TeX-system if used as TeX-generator (in fact, you can create TeX-Files, but without a TeX-System you will have no fun with it ;-))'
 
@@ -66,7 +67,7 @@ unittest/unittest_todonotes.rb
   gemdef.add_ftp_connection('ftp.rubypla.net', Knut::FTP_RUBYPLANET_USER, Knut::FTP_RUBYPLANET_PW, "/Ruby/gemdocs/todonotes/#{$todonotes_version}")
 
 
-  gemdef.define_test( 'unittest', FileList['unittest*.rb'])
+  gemdef.define_test( 'unittest', FileList['minitest*.rb'])
   gemdef.versions << Todonotes::VERSION
 
 }
@@ -87,7 +88,7 @@ desc "Default: :readme, :gem"
 task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
-#~ task :default => :hanna_local
+task :default => :hanna_local
 #~ task :default => :hanna
 
 #~ task :default => :install
@@ -121,4 +122,5 @@ See also
 * http://stackoverflow.com/a/13668213/676874
 
 0.1.2:
-* 
+* Use Minitest
+* Evaluate block for each call (allows dynamic results)

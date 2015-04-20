@@ -20,6 +20,7 @@ next occurences are informations.
       #Build result
       @result = yield if block_given?
       
+      #The Todonotes::FixmeFormatter can handle array in a special way to reformat the output.
       @logger.warn([@type, "#{@codeline} #{@shortdescription} (temporary: #{@result.inspect})"])
 
     end
@@ -31,8 +32,10 @@ next occurences are informations.
 Todo/Fixme is called again  
 =end
     def call()
+      #The Todonotes::FixmeFormatter can handle array in a special way to reformat the output.
       @logger.info([@type, "#{@codeline}(#{@count}) #{@shortdescription} (temporary: #{@result.inspect})"])
       @count += 1
+      @result = yield if block_given? #re-evaluate block
     end
 =begin rdoc
 =end    
