@@ -22,9 +22,11 @@ See also
 0.2.0
 * Adapted for ruby 2.1
 
-0.2.1 
+0.2.1 2015-04-28 
 * Adapted log4r-requirement (adapted Version)
+
+0.2.2
 =end
 module Todonotes
-  VERSION = '0.2.1'
+  VERSION = '0.2.2'
 end
