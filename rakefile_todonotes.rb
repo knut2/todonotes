@@ -10,8 +10,8 @@ require 'todonotes/version'
 
 $todonotes_version = "0.2.1.beta"  
 if $todonotes_version != Todonotes::VERSION
-  puts "BETA!"
-#~ $todonotes_version = Todonotes::VERSION
+  puts "BETA! %s != %s" % [ $todonotes_version, Todonotes::VERSION]; STDOUT.flush
+  $todonotes_version = Todonotes::VERSION
 end
 
 
@@ -23,10 +23,11 @@ rake4latexgem = Knut::Gem_packer.new('todonotes', $todonotes_version){ |gemdef, 
   s.author = "Knut Lickert"
   s.email = "knut@lickert.net"
   #~ s.homepage = "http://ruby.lickert.net/todonotes"
-  s.homepage = "http://rubypla.net/todonotes"
+  #~ s.homepage = "http://rubypla.net/todonotes"
+  s.homepage = "https://github.com/knut2/todonotes"
   #~ s.rubyforge_project = 'todonotes'
   s.platform = Gem::Platform::RUBY
-  s.summary = "Support programming by todonotes/todo commands."
+  s.summary = "Support programming by todo and fixme commands."
   s.description = <<DESCR
 Support programming by fixme/todo commands.
 Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957, 
@@ -65,11 +66,11 @@ unittest/minitest_todonotes.rb
   
   #~ s.add_development_dependency('more_unit_test', '> 0.0.2')  #assert_equal_filecontent
   s.add_development_dependency('minitest-logger', '~> 0', '>= 0.1.1')
-  s.add_dependency('log4r', '~> 0') 
+  s.add_dependency('log4r', '~> 1') 
   #~ s.requirements << 'Optional: A (La)TeX-system if used as TeX-generator (in fact, you can create TeX-Files, but without a TeX-System you will have no fun with it ;-))'
 
   gemdef.public = true
-  gemdef.add_ftp_connection('ftp.rubypla.net', Knut::FTP_RUBYPLANET_USER, Knut::FTP_RUBYPLANET_PW, "/Ruby/gemdocs/todonotes/#{$todonotes_version}")
+  #~ gemdef.add_ftp_connection('ftp.rubypla.net', Knut::FTP_RUBYPLANET_USER, Knut::FTP_RUBYPLANET_PW, "/Ruby/gemdocs/todonotes/#{$todonotes_version}")
 
 
   gemdef.define_test( 'unittest', FileList['minitest*.rb'])
@@ -90,7 +91,7 @@ end
 
 desc "Default: :readme, :gem"
 #~ task :default => :check
-task :default => :test
+#~ task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 #~ task :default => :hanna_local

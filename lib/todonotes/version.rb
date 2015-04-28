@@ -18,6 +18,12 @@ See also
 * Use Minitest
 * Evaluate block for each call (allows dynamic results)
 * raise NotImplementedError on request
+
+0.2.0
+* Adapted for ruby 2.1
+
+0.2.1 
+* Adapted log4r-requirement (adapted Version)
 =end
 module Todonotes
   VERSION = '0.2.1'
