@@ -9,6 +9,7 @@ $:.unshift('lib')
 require 'todonotes/version'
 
 $todonotes_version = "0.2.2.beta"  
+$todonotes_version = "0.2.2"  
 if $todonotes_version != Todonotes::VERSION
   puts "BETA! %s != %s" % [ $todonotes_version, Todonotes::VERSION]; STDOUT.flush
   #~ $todonotes_version = Todonotes::VERSION
@@ -25,6 +26,7 @@ rake4latexgem = Knut::Gem_packer.new('todonotes', $todonotes_version){ |gemdef, 
   #~ s.homepage = "http://ruby.lickert.net/todonotes"
   #~ s.homepage = "http://rubypla.net/todonotes"
   s.homepage = "https://github.com/knut2/todonotes"
+  s.license = 'LGPL-3.0' #http://opensource.org/licenses/alphabetical http://opensource.org/licenses/LGPL-3.0
   #~ s.rubyforge_project = 'todonotes'
   s.platform = Gem::Platform::RUBY
   s.summary = "Support programming by todo and fixme commands."
@@ -91,7 +93,7 @@ end
 
 desc "Default: :readme, :gem"
 #~ task :default => :check
-#~ task :default => :test
+task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 #~ task :default => :hanna_local

@@ -26,6 +26,8 @@ See also
 * Adapted log4r-requirement (adapted Version)
 
 0.2.2
+* Added license 'LGPL-3.0' http://opensource.org/licenses/LGPL-3.0
+  https://github.com/knut2/todonotes/issues/1
 =end
 module Todonotes
   VERSION = '0.2.2'
