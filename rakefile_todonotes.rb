@@ -38,6 +38,7 @@ DESCR
   s.require_path = "lib"
   s.files = %w{
 readme.rdoc
+LICENSE.md
 lib/todonotes.rb
 lib/todonotes/todonotes.rb
 lib/todonotes/todo.rb
@@ -59,7 +60,7 @@ unittest/minitest_todonotes.rb
 
   s.has_rdoc	= true  
   s.extra_rdoc_files = %w{
-    readme.rdoc
+    readme.rdoc LICENSE.md
   }
     #~ examples/todonotes_how_to.rb
     #~ examples/todonotes_prim.rb
