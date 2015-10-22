@@ -8,7 +8,7 @@ require '../knut_pw.rb'
 $:.unshift('lib')
 require 'todonotes/version'
 
-$todonotes_version = "0.2.2"  
+$todonotes_version = "0.2.3.beta"  
 if $todonotes_version != Todonotes::VERSION
   puts "BETA! %s != %s" % [ $todonotes_version, Todonotes::VERSION]; STDOUT.flush
   #~ $todonotes_version = Todonotes::VERSION
@@ -90,8 +90,8 @@ task :hanna_local do
 end
 
 desc "Default: :readme, :gem"
-task :default => :check
-#~ task :default => :test
+#~ task :default => :check
+task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 #~ task :default => :hanna_local
@@ -100,7 +100,8 @@ task :default => :check
 #~ task :default => :install
 #~ task :default => :links
 #~ task :default => :ftp_rdoc
-task :default => :push
+#~ task :default => :push
+#~ task :default => :yank
 
 
 

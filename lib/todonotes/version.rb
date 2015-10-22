@@ -33,5 +33,5 @@ See also
   https://github.com/knut2/todonotes/issues/1
 =end
 module Todonotes
-  VERSION = '0.2.2'
+  VERSION = '0.2.3.beta'
 end
