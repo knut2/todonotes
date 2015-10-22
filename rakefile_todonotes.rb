@@ -8,7 +8,6 @@ require '../knut_pw.rb'
 $:.unshift('lib')
 require 'todonotes/version'
 
-$todonotes_version = "0.2.2.beta"  
 $todonotes_version = "0.2.2"  
 if $todonotes_version != Todonotes::VERSION
   puts "BETA! %s != %s" % [ $todonotes_version, Todonotes::VERSION]; STDOUT.flush
@@ -32,8 +31,6 @@ rake4latexgem = Knut::Gem_packer.new('todonotes', $todonotes_version){ |gemdef, 
   s.summary = "Support programming by todo and fixme commands."
   s.description = <<DESCR
 Support programming by fixme/todo commands.
-Gem based on a proposal in http://forum.ruby-portal.de/viewtopic.php?f=11&t=11957, 
-see also http://stackoverflow.com/a/13668213/676874
 DESCR
   s.require_path = "lib"
   s.files = %w{
@@ -93,8 +90,8 @@ task :hanna_local do
 end
 
 desc "Default: :readme, :gem"
-#~ task :default => :check
-task :default => :test
+task :default => :check
+#~ task :default => :test
 #~ task :default => :readme
 #~ task :default => [ :gem ]
 #~ task :default => :hanna_local
@@ -103,7 +100,7 @@ task :default => :test
 #~ task :default => :install
 #~ task :default => :links
 #~ task :default => :ftp_rdoc
-#~ task :default => :push
+task :default => :push
 
 
 
